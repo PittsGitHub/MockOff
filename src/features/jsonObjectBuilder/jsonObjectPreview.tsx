@@ -8,9 +8,10 @@ type MockJsonDataVerbose = {
 
 interface Props {
   mockJsonData: MockJsonDataVerbose[]
+  setMockJsonData: (data: MockJsonDataVerbose[]) => void
 }
 
-export const JsonObjectPreview = ({ mockJsonData }: Props) => {
+export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
   const [copied, setCopied] = useState(false)
   const [exported, setExported] = useState(false)
 
@@ -66,11 +67,90 @@ export const JsonObjectPreview = ({ mockJsonData }: Props) => {
             )}
           >
             <div className="flex space-x-2">
-              <div className="flex-1 px-2 py-1 rounded bg-indigo-900 text-pink-100 font-semibold text-center">
-                {entry.key}:
+              {/* Editable KEY */}
+              <div
+                className="flex-1 px-2 py-1 rounded bg-indigo-900 text-pink-100 font-semibold text-center cursor-pointer"
+                onClick={() => {
+                  setEditingIdx(idx)
+                  setEditingField('key')
+                  setTempEdit(entry.key)
+                }}
+              >
+                {editingIdx === idx && editingField === 'key' ? (
+                  <input
+                    type="text"
+                    value={tempEdit}
+                    onChange={(e) => setTempEdit(e.target.value)}
+                    onBlur={() => {
+                      const updated = [...mockJsonData]
+                      const oldEntry = updated[idx]
+                      updated[idx] = {
+                        ...oldEntry,
+                        key:
+                          tempEdit.trim() === ''
+                            ? oldEntry.key
+                            : tempEdit.trim(),
+                      }
+                      setMockJsonData(updated)
+
+                      setEditingIdx(null)
+                      setEditingField(null)
+                    }}
+                    className={clsx(
+                      'w-full px-2 py-1 rounded text-center',
+                      'placeholder-pink-100',
+                      'focus:placeholder-transparent',
+                      'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50',
+                      'transition-all duration-300 shadow-md focus:outline-none'
+                    )}
+                    autoFocus
+                  />
+                ) : (
+                  `${entry.key}:`
+                )}
               </div>
-              <div className="flex-1 px-2 py-1 rounded bg-indigo-800 text-indigo-100 text-center font-mono">
-                {entry.value}
+
+              {/* Editable VALUE */}
+              <div
+                className="flex-1 px-2 py-1 rounded bg-indigo-800 text-indigo-100 text-center font-mono cursor-pointer"
+                onClick={() => {
+                  setEditingIdx(idx)
+                  setEditingField('value')
+                  setTempEdit(entry.value)
+                }}
+              >
+                {editingIdx === idx && editingField === 'value' ? (
+                  <input
+                    type="text"
+                    value={tempEdit}
+                    onChange={(e) => setTempEdit(e.target.value)}
+                    onBlur={() => {
+                      const updated = [...mockJsonData]
+                      const oldEntry = updated[idx]
+                      updated[idx] = {
+                        ...oldEntry,
+                        value:
+                          tempEdit.trim() === ''
+                            ? oldEntry.value
+                            : tempEdit.trim(),
+                      }
+                      setMockJsonData(updated)
+
+                      setEditingIdx(null)
+                      setEditingField(null)
+                    }}
+                    className={clsx(
+                      'w-full px-2 py-1 rounded text-center',
+                      'placeholder-pink-100',
+                      'focus:placeholder-transparent',
+                      'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50',
+                      'transition-all duration-300 shadow-md focus:outline-none'
+                    )}
+                    autoFocus
+                  />
+                ) : (
+                  entry.value
+                )}
               </div>
             </div>
           </li>

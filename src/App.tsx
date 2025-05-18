@@ -52,7 +52,10 @@ function App() {
               setMockJsonData={setMockJsonData}
             />
             <div className="mt-4">
-              <JsonObjectPreview mockJsonData={mockJsonData} />
+              <JsonObjectPreview
+                mockJsonData={mockJsonData}
+                setMockJsonData={setMockJsonData}
+              />
             </div>
           </>
         )}
