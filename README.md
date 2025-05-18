@@ -8,9 +8,8 @@ exporting to a .json file or direct to clipboard.
 
 ## Features
 
-- ⚡️ Built with **Vite** for fast dev & builds
-- 🎨 Styled using **TailwindCSS**
-- 🧩 Crafted in **React + TypeScript**
+- 🔁 Quick tabbed input 
+- 🧩 Unique Key validation
 - 🧠 Supports **type inference** for values
 - 💾 One-click **export or copy** of generated `.json` with total item count
 
@@ -32,6 +31,9 @@ npm run dev
 ```
 
 ## Example Input & Output
+Quick input:
+input key => **tab** => input value => **tab** => **enter key** => input key 🔁
+
 ![mockOff](https://github.com/user-attachments/assets/5273c5d7-44b2-461d-9fe4-977cc2182902)
 
 ```
