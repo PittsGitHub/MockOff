@@ -35,7 +35,11 @@ function App() {
     >
       <h1 className="text-5xl font-bold tracking-tight ">Mock Off</h1>
       <p className="text-sm text-pink-200 italic tracking-wide font-light">
-        .json object builder & object generation
+        Mock Off
+      </p>
+
+      <p className="text-sm text-pink-200 italic tracking-wide font-light">
+        JSON object building & generation
       </p>
 
       <GlobalNav activeView={activeView} setActiveView={setActiveView} />
