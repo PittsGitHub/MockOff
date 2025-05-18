@@ -34,9 +34,6 @@ function App() {
       )}
     >
       <h1 className="text-5xl font-bold tracking-tight ">Mock Off</h1>
-      <p className="text-sm text-pink-200 italic tracking-wide font-light">
-        Mock Off
-      </p>
 
       <p className="text-sm text-pink-200 italic tracking-wide font-light">
         JSON object building & generation

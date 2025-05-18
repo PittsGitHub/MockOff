@@ -1,21 +1,53 @@
-# 🐶🧙‍♂️ BilboilerPlate
+# 🧌 Mock Off
 
-A cozy Vite + React + TypeScript starter with TailwindCSS, ESLint, Prettier, Husky, and lint-staged all bundled in — ready to take you there and back again.
+A JSON mock data builder whether you’re prototyping, testing, or just mocking around
+Mock Off helps you generate and shape JSON structures with live preview, type inference,
+exporting to a .json file or direct to clipboard.
 
-## ✨ Features
+---
 
-- ⚡️ Vite
-- 🎨 TailwindCSS
-- 🧩 React & TypeScript
-- 🧹 ESLint & Prettier for clean code
-- 🛡️ Husky & lint-staged for pre-commit linting
-- 👓 clsx for easier className readability
+## Features
+
+- ⚡️ Built with **Vite** for fast dev & builds
+- 🎨 Styled using **TailwindCSS**
+- 🧩 Crafted in **React + TypeScript**
+- 🧠 Supports **type inference** for values
+- 💾 One-click **export or copy** of generated `.json` with total item count
+
+---
+
+## ✨ Up Coming Features ✨
+
+- 🧬 Nested objects and array types
+- 🧌 Mock object generation
+- 📂 Drag and drop .json for mock generation
 
 ## 📦 Getting Started
 
 ```bash
-git clone https://github.com/PittsGitHub/BilboilerPlate.git
-cd BilboilerPlate
+git clone https://github.com/PittsGitHub/MockOff.git
+cd MockOff
 npm install
 npm run dev
+```
+
+## Example Output
+
+```
+[
+  {
+    "totalItemCount": 1,
+    "items": [
+      {
+        "id": 1,
+        "name": "Bilbo",
+        "dog": true,
+        "age": 4.55,
+        "naughty": false,
+        "fineBoy": true,
+        "daysSinceLastBork": -1.5
+      }
+    ]
+  }
+]
 ```

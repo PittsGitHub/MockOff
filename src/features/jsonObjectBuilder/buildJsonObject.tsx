@@ -14,9 +14,12 @@ interface Props {
 export const BuildJsonObject = ({ mockJsonData, setMockJsonData }: Props) => {
   const [inputJsonKey, setInputJsonKey] = useState<string>('')
   const [inputJsonValue, setJsonValue] = useState<string>('')
+  const trimmedKey = inputJsonKey.trim()
+  const trimmedValue = inputJsonValue.trim()
+  const isDuplicate = mockJsonData.some((entry) => entry.key === trimmedKey)
 
   const addButtonEnabled =
-    inputJsonKey.trim() !== '' && inputJsonValue.trim() !== ''
+    inputJsonKey.trim() !== '' && inputJsonValue.trim() !== '' && !isDuplicate
 
   const handleAdd = () => {
     if (inputJsonKey.trim() !== '' && inputJsonValue.trim() !== '') {
@@ -77,23 +80,27 @@ export const BuildJsonObject = ({ mockJsonData, setMockJsonData }: Props) => {
 
         <div
           title={
-            inputJsonKey.trim() === '' || inputJsonValue.trim() === ''
-              ? 'Input key & value to enable Add'
-              : ''
+            trimmedKey === ''
+              ? 'Missing Key'
+              : trimmedValue === ''
+                ? 'Missing Value'
+                : isDuplicate
+                  ? 'That key already exists'
+                  : ''
           }
         >
           <button
             type="button"
             onClick={handleAdd}
-            disabled={
-              inputJsonKey.trim() === '' || inputJsonValue.trim() === ''
-            }
+            disabled={!addButtonEnabled}
             className={clsx(
               'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50 focus-visible:backdrop-blur-md focus-visible:backdrop-saturate-150',
               'w-full text-center px-4 py-2 rounded-md  transition-all duration-600 shadow-md',
-              inputJsonKey.trim() === '' || inputJsonValue.trim() === ''
+              inputJsonKey.trim() === '' ||
+                inputJsonValue.trim() === '' ||
+                isDuplicate
                 ? 'text-pink-300 font-normal line-through bg-purple-950 cursor-not-allowed'
-                : 'bg-white text-indigo-800 hover:bg-pink-100 font-semibold cursor-pointer '
+                : 'bg-white text-indigo-800 hover:bg-pink-300 font-semibold cursor-pointer '
             )}
           >
             {addButtonEnabled ? 'Add property' : 'Add property'}

@@ -1,5 +1,6 @@
 import clsx from 'clsx'
 import { useState } from 'react'
+import { buildExportObject } from '../../services/inferTypeAndFormat.service'
 
 type MockJsonDataVerbose = {
   key: string
@@ -15,20 +16,15 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
   const [copied, setCopied] = useState(false)
   const [exported, setExported] = useState(false)
 
-  const transformedData = mockJsonData.reduce(
-    (acc, entry) => {
-      acc[entry.key] = entry.value
-      return acc
-    },
-    {} as Record<string, string>
-  )
+  const exportData = buildExportObject(mockJsonData)
 
   const [editingIdx, setEditingIdx] = useState<number | null>(null)
   const [editingField, setEditingField] = useState<'key' | 'value' | null>(null)
   const [tempEdit, setTempEdit] = useState<string>('')
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
 
   const handleExport = () => {
-    const blob = new Blob([JSON.stringify([transformedData], null, 2)], {
+    const blob = new Blob([JSON.stringify([exportData], null, 2)], {
       type: 'application/json',
     })
     const url = URL.createObjectURL(blob)
@@ -44,9 +40,7 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
 
   const handleCopy = async () => {
     try {
-      await navigator.clipboard.writeText(
-        JSON.stringify([transformedData], null, 2)
-      )
+      await navigator.clipboard.writeText(JSON.stringify([exportData], null, 2))
       console.log('Copied to clipboard!')
       setCopied(true)
       setTimeout(() => setCopied(false), 500)
@@ -60,16 +54,23 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
       <ul className="space-y-0.75">
         {mockJsonData.map((entry, idx) => (
           <li
-            key={idx}
+            key={entry.key}
+            onMouseEnter={() => setHoveredIdx(idx)}
+            onMouseLeave={() => setHoveredIdx(null)}
             className={clsx(
-              'w-full px-2 py-2 rounded-md ',
+              'w-full px-2 py-2 rounded-md',
               'backdrop-blur-md backdrop-saturate-150 transition-all delay-100 duration-300 shadow-md hover:shadow-xl hover:scale-105'
             )}
           >
-            <div className="flex space-x-2">
-              {/* Editable KEY */}
+            <div className="flex ">
+              {/* KEY - shrink to 4/9 if hovering */}
               <div
-                className="flex-1 px-2 py-1 rounded bg-indigo-900 text-pink-100 font-semibold text-center cursor-pointer"
+                className={clsx(
+                  'px-2 py-1 rounded text-center font-semibold cursor-pointer m-1',
+                  hoveredIdx === idx
+                    ? 'w-4/9 bg-indigo-900 text-pink-100'
+                    : 'w-1/2 bg-indigo-900 text-pink-100'
+                )}
                 onClick={() => {
                   setEditingIdx(idx)
                   setEditingField('key')
@@ -97,7 +98,7 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                       setEditingField(null)
                     }}
                     className={clsx(
-                      'w-full px-2 py-1 rounded text-center',
+                      'w-full  rounded text-center',
                       'placeholder-pink-100',
                       'focus:placeholder-transparent',
                       'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50',
@@ -106,13 +107,18 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                     autoFocus
                   />
                 ) : (
-                  `${entry.key}:`
+                  `${entry.key}`
                 )}
               </div>
 
-              {/* Editable VALUE */}
+              {/* VALUE - shrink to 4/9 if hovering*/}
               <div
-                className="flex-1 px-2 py-1 rounded bg-indigo-800 text-indigo-100 text-center font-mono cursor-pointer"
+                className={clsx(
+                  'px-2 py-1 rounded text-center font-mono cursor-pointer m-1',
+                  hoveredIdx === idx
+                    ? 'w-4/9 bg-indigo-800 text-indigo-100'
+                    : 'w-1/2 bg-indigo-800 text-indigo-100'
+                )}
                 onClick={() => {
                   setEditingIdx(idx)
                   setEditingField('value')
@@ -140,7 +146,7 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                       setEditingField(null)
                     }}
                     className={clsx(
-                      'w-full px-2 py-1 rounded text-center',
+                      'w-full  rounded text-center',
                       'placeholder-pink-100',
                       'focus:placeholder-transparent',
                       'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50',
@@ -152,6 +158,19 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                   entry.value
                 )}
               </div>
+              {/* DELETE PANEL — 1/9 conditionally rendered on hover*/}
+              {hoveredIdx === idx && (
+                <div
+                  className="w-1/9 m-1 px-2 py-1 rounded bg-purple-950 text-center text-pink-200 font-bold cursor-pointer transition-opacity duration-300"
+                  onClick={() => {
+                    const updated = mockJsonData.filter((_, i) => i !== idx)
+                    setMockJsonData(updated)
+                  }}
+                  title="Delete property"
+                >
+                  X
+                </div>
+              )}
             </div>
           </li>
         ))}
@@ -162,10 +181,10 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
           type="button"
           onClick={handleExport}
           className={clsx(
-            'flex-1 px-4 py-2 text-indigo-800 font-semibold rounded-lg shadow  transition-all duration-500',
+            'flex-1 px-4 py-2 text-indigo-800 font-semibold rounded-lg shadow  transition-all duration-600',
             exported
               ? 'bg-transparent text-pink-100 border-blue-400 ring ring-blue-400 ring-opacity-50 backdrop-blur-md backdrop-saturate-150'
-              : 'bg-white hover:bg-pink-100 text-indigo-800 shadow cursor-pointer'
+              : 'bg-white hover:bg-pink-300 text-indigo-800 shadow cursor-pointer'
           )}
         >
           {exported ? 'Exported!' : 'Export to .json file'}
@@ -175,10 +194,10 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
           type="button"
           onClick={handleCopy}
           className={clsx(
-            'flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-500',
+            'flex-1 px-4 py-2 rounded-lg font-semibold transition-all duration-600',
             copied
               ? 'bg-transparent text-pink-100  ring-opacity-50 backdrop-blur-md backdrop-saturate-150 shadow-md '
-              : 'bg-white hover:bg-pink-100 text-indigo-800 shadow cursor-pointer'
+              : 'bg-white hover:bg-pink-300 text-indigo-800 shadow cursor-pointer'
           )}
         >
           {copied ? 'Copied!' : 'Copy .json'}
