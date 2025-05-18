@@ -31,7 +31,8 @@ npm install
 npm run dev
 ```
 
-## Example Output
+## Example Input & Output
+![mockOff](https://github.com/user-attachments/assets/5273c5d7-44b2-461d-9fe4-977cc2182902)
 
 ```
 [
