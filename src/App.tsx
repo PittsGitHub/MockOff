@@ -40,7 +40,6 @@ function App() {
 
       <GlobalNav activeView={activeView} setActiveView={setActiveView} />
 
-      {/* A fixed-height spacer area to visually separate nav from content */}
       <div className="mt-8 w-full max-w-sm">
         {activeView === 'builder' && (
           <>

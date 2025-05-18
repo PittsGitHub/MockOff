@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 type MockJsonDataVerbose = {
   key: string
@@ -11,11 +11,9 @@ interface Props {
 }
 
 export const JsonObjectPreview = ({ mockJsonData }: Props) => {
-  //React Hooks
   const [copied, setCopied] = useState(false)
   const [exported, setExported] = useState(false)
 
-  //Data Transform
   const transformedData = mockJsonData.reduce(
     (acc, entry) => {
       acc[entry.key] = entry.value
@@ -23,6 +21,10 @@ export const JsonObjectPreview = ({ mockJsonData }: Props) => {
     },
     {} as Record<string, string>
   )
+
+  const [editingIdx, setEditingIdx] = useState<number | null>(null)
+  const [editingField, setEditingField] = useState<'key' | 'value' | null>(null)
+  const [tempEdit, setTempEdit] = useState<string>('')
 
   const handleExport = () => {
     const blob = new Blob([JSON.stringify([transformedData], null, 2)], {
@@ -54,30 +56,6 @@ export const JsonObjectPreview = ({ mockJsonData }: Props) => {
 
   return (
     <div className="flex flex-col space-y-0 w-full max-w-sm">
-      {/* <h1 className="text-lg text-pink-100 text-center">json object preview</h1> */}
-      {/* <h1 className="text-2xl text-center font-bold tracking-tight mb-1.5">
-        preview
-      </h1> */}
-      {/* one row for the kvp*/}
-      {/* <ul className="space-y-0.75">
-        {mockJsonData.map((entry, idx) => (
-          <li
-            key={idx}
-            className={clsx(
-              'w-full text-center px-4 py-2 rounded-md text-pink-100 border-1 focus:outline-none transition-all delay-100 duration-300 shadow-md',
-              'text-pink-100 focus:outline-none border-blue-400 ring ring-blue-400 ring-opacity-50 backdrop-blur-md backdrop-saturate-150 hover:shadow-xl hover:scale-105'
-            )}
-          >
-            <div className="flex justify-between font-mono text-left">
-              <span className="font-bold ">{entry.key}:</span>
-              <span className="text-indigo-100 w-1/2 text-right">
-                {entry.value}
-              </span>
-            </div>
-          </li>
-        ))}
-      </ul> */}
-
       <ul className="space-y-0.75">
         {mockJsonData.map((entry, idx) => (
           <li

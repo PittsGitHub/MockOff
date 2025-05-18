@@ -37,9 +37,6 @@ export const BuildJsonObject = ({ mockJsonData, setMockJsonData }: Props) => {
 
   return (
     <div className="flex flex-col space-y-1 w-full max-w-sm">
-      {/* <h1 className="text-2xl text-center font-bold tracking-tight mb-1.5">
-        property
-      </h1> */}
       <div
         className={clsx(
           'w-full px-4 py-4 rounded-md space-y-2',
@@ -94,7 +91,6 @@ export const BuildJsonObject = ({ mockJsonData, setMockJsonData }: Props) => {
             className={clsx(
               'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50 focus-visible:backdrop-blur-md focus-visible:backdrop-saturate-150',
               'w-full text-center px-4 py-2 rounded-md  transition-all duration-600 shadow-md',
-              // 'focus-visible:ring focus-visible:ring-pink-300 focus-visible:ring-offset-2',
               inputJsonKey.trim() === '' || inputJsonValue.trim() === ''
                 ? 'text-pink-300 font-normal line-through bg-purple-950 cursor-not-allowed'
                 : 'bg-white text-indigo-800 hover:bg-pink-100 font-semibold cursor-pointer '
@@ -107,10 +103,3 @@ export const BuildJsonObject = ({ mockJsonData, setMockJsonData }: Props) => {
     </div>
   )
 }
-
-//  className={clsx(
-//             'flex-1 px-4 py-2 font-semibold rounded-lg shadow transition',
-//             activeView === 'builder'
-//               ? 'border-blue-400 ring ring-blue-400 ring-opacity-50 backdrop-blur-md backdrop-saturate-150'
-//               : 'bg-white text-indigo-800 hover:bg-pink-100'
-//           )}
