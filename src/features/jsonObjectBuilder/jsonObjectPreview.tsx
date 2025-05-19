@@ -66,7 +66,9 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
               {/* KEY - shrink to 4/9 if hovering */}
               <div
                 className={clsx(
-                  'px-2 py-1 rounded text-center font-semibold cursor-pointer m-1',
+                  'px-2 py-1 rounded font-mono cursor-pointer m-1',
+                  'min-h-[3.5rem] max-h-[3.5rem] overflow-hidden',
+                  'whitespace-pre-wrap break-words text-center content-center',
                   hoveredIdx === idx
                     ? 'w-4/9 bg-indigo-900 text-pink-100'
                     : 'w-1/2 bg-indigo-900 text-pink-100'
@@ -78,8 +80,8 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                 }}
               >
                 {editingIdx === idx && editingField === 'key' ? (
-                  <input
-                    type="text"
+                  <textarea
+                    rows={2}
                     value={tempEdit}
                     onChange={(e) => setTempEdit(e.target.value)}
                     onBlur={() => {
@@ -98,11 +100,13 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                       setEditingField(null)
                     }}
                     className={clsx(
-                      'w-full  rounded text-center',
-                      'placeholder-pink-100',
-                      'focus:placeholder-transparent',
-                      'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50',
-                      'transition-all duration-300 shadow-md focus:outline-none'
+                      'text-center pt-[0.75rem]',
+                      'w-full rounded  font-mono px-2 resize-none',
+                      'text-center content-center',
+                      'z-10 relative',
+                      'placeholder-pink-100 focus:placeholder-transparent',
+                      'focus-visible:ring focus-visible:ring-blue-400 focus:outline-none',
+                      'transition-all duration-300 shadow-md'
                     )}
                     autoFocus
                   />
@@ -114,7 +118,9 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
               {/* VALUE - shrink to 4/9 if hovering*/}
               <div
                 className={clsx(
-                  'px-2 py-1 rounded text-center font-mono cursor-pointer m-1',
+                  'px-2 py-1 rounded font-mono cursor-pointer m-1',
+                  'min-h-[3.5rem] max-h-[3.5rem] overflow-hidden',
+                  'whitespace-pre-wrap break-words text-center content-center',
                   hoveredIdx === idx
                     ? 'w-4/9 bg-indigo-800 text-indigo-100'
                     : 'w-1/2 bg-indigo-800 text-indigo-100'
@@ -126,8 +132,8 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                 }}
               >
                 {editingIdx === idx && editingField === 'value' ? (
-                  <input
-                    type="text"
+                  <textarea
+                    rows={2}
                     value={tempEdit}
                     onChange={(e) => setTempEdit(e.target.value)}
                     onBlur={() => {
@@ -141,16 +147,17 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                             : tempEdit.trim(),
                       }
                       setMockJsonData(updated)
-
                       setEditingIdx(null)
                       setEditingField(null)
                     }}
                     className={clsx(
-                      'w-full  rounded text-center',
-                      'placeholder-pink-100',
-                      'focus:placeholder-transparent',
-                      'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50',
-                      'transition-all duration-300 shadow-md focus:outline-none'
+                      'text-center pt-[0.75rem]',
+                      'w-full rounded  font-mono px-2 resize-none',
+                      'text-center content-center',
+                      'z-10 relative',
+                      'placeholder-pink-100 focus:placeholder-transparent',
+                      'focus-visible:ring focus-visible:ring-blue-400 focus:outline-none',
+                      'transition-all duration-300 shadow-md'
                     )}
                     autoFocus
                   />
@@ -161,7 +168,7 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
               {/* DELETE PANEL — 1/9 conditionally rendered on hover*/}
               {hoveredIdx === idx && (
                 <div
-                  className="w-1/9 m-1 px-2 py-1 rounded bg-purple-950 text-center text-pink-200 font-bold cursor-pointer transition-opacity duration-300"
+                  className="w-1/9 m-1 px-2 py-1 rounded bg-purple-950 text-center content-center text-pink-200 font-bold cursor-pointer transition-opacity duration-300"
                   onClick={() => {
                     const updated = mockJsonData.filter((_, i) => i !== idx)
                     setMockJsonData(updated)
