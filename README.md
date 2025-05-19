@@ -10,14 +10,14 @@ exporting to a .json file or direct to clipboard.
 
 - 🔁 Quick tabbed input 
 - 🧩 Unique Key validation
-- 🧠 Supports **type inference** for values
+- 🧠 Supports **type inference** for values and arrays
 - 💾 One-click **export or copy** of generated `.json` with total item count
 
 ---
 
 ## ✨ Up Coming Features ✨
 
-- 🧬 Nested objects and array types
+- 🧬 Nested objects
 - 🧌 Mock object generation
 - 📂 Drag and drop .json for mock generation
 
