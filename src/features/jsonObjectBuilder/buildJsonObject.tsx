@@ -1,36 +1,56 @@
 import { useRef, useState } from 'react'
+import { JsonObject, JsonObjectProperty } from '../../types/jsonTypes'
 import clsx from 'clsx'
 
-type MockJsonDataVerbose = {
-  key: string
-  value: string
-}
-
 interface Props {
-  mockJsonData: MockJsonDataVerbose[]
-  setMockJsonData: (data: MockJsonDataVerbose[]) => void
+  jsonObject: JsonObject
+  setJsonObject: (jsonObject: JsonObject) => void
 }
 
-export const BuildJsonObject = ({ mockJsonData, setMockJsonData }: Props) => {
-  const [inputJsonKey, setInputJsonKey] = useState<string>('')
-  const [inputJsonValue, setJsonValue] = useState<string>('')
-  const trimmedKey = inputJsonKey.trim()
-  const trimmedValue = inputJsonValue.trim()
-  const isDuplicate = mockJsonData.some((entry) => entry.key === trimmedKey)
+export const BuildJsonObject = ({ jsonObject, setJsonObject }: Props) => {
+  const [inputJsonPropertyKey, setInputJsonPropertyKey] = useState<string>('')
+  const [inputJsonPropertyValue, setJsonPropertyValue] = useState<string>('')
+  const trimmedKey = inputJsonPropertyKey.trim()
+  const trimmedValue = inputJsonPropertyValue.trim()
+
+  const isDuplicate = jsonObject.jsonObjectProperties.some(
+    (entry) => entry.key === trimmedKey
+  )
 
   const addButtonEnabled =
-    inputJsonKey.trim() !== '' && inputJsonValue.trim() !== '' && !isDuplicate
+    inputJsonPropertyKey.trim() !== '' &&
+    inputJsonPropertyValue.trim() !== '' &&
+    !isDuplicate
 
   const handleAdd = () => {
-    if (inputJsonKey.trim() !== '' && inputJsonValue.trim() !== '') {
-      const newJsonEntry: MockJsonDataVerbose = {
-        key: inputJsonKey,
-        value: inputJsonValue,
+    // If our key and value are not empty
+    if (
+      inputJsonPropertyKey.trim() !== '' &&
+      inputJsonPropertyValue.trim() !== ''
+    ) {
+      // then we create a new property for our object
+      const newJsonObjectProperty: JsonObjectProperty = {
+        key: inputJsonPropertyKey,
+        value: inputJsonPropertyValue,
       }
-      const newMockJsonArray = [...mockJsonData, newJsonEntry]
-      setMockJsonData(newMockJsonArray)
-      setInputJsonKey('')
-      setJsonValue('')
+      // we create a new array of json properties
+      // it includes the existing properties plus our new property
+      const newJsonProperties: JsonObjectProperty[] = [
+        ...jsonObject.jsonObjectProperties,
+        newJsonObjectProperty,
+      ]
+
+      // finally we create a new json object with our
+      // new property appended to our existing properties
+      const newJsonObject: JsonObject = {
+        jsonObjectProperties: newJsonProperties,
+      }
+
+      // we then call back and set the new Json object
+      // we also reset the input for key and value
+      setJsonObject(newJsonObject)
+      setInputJsonPropertyKey('')
+      setJsonPropertyValue('')
 
       inputKeyRef.current?.focus()
     }
@@ -51,27 +71,28 @@ export const BuildJsonObject = ({ mockJsonData, setMockJsonData }: Props) => {
         <input
           ref={inputKeyRef}
           type="text"
-          value={inputJsonKey}
-          onChange={(e) => setInputJsonKey(e.target.value)}
+          value={inputJsonPropertyKey}
+          onChange={(e) => setInputJsonPropertyKey(e.target.value)}
           className={clsx(
             'placeholder-pink-100',
             'focus:placeholder-transparent',
             'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50 focus-visible:backdrop-blur-md focus-visible:backdrop-saturate-150',
             'bg-indigo-900 w-full text-center px-4 py-2 rounded-md text-white focus:outline-none transition-all duration-300 shadow-md ',
-            inputJsonKey.trim() === '' ? '  animate-pulse' : '  '
+            inputJsonPropertyKey.trim() === '' ? '  animate-pulse' : '  '
           )}
           placeholder="Enter key"
         />
         <input
           type="text"
-          value={inputJsonValue}
-          onChange={(e) => setJsonValue(e.target.value)}
+          value={inputJsonPropertyValue}
+          onChange={(e) => setJsonPropertyValue(e.target.value)}
           className={clsx(
             'placeholder-pink-100',
             'focus:placeholder-transparent',
             'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50 focus-visible:backdrop-blur-md focus-visible:backdrop-saturate-150',
             'bg-indigo-800 w-full text-center px-4 py-2 rounded-md text-white focus:outline-none transition-all duration-300 shadow-md ',
-            inputJsonKey.trim() !== '' && inputJsonValue.trim() === ''
+            inputJsonPropertyKey.trim() !== '' &&
+              inputJsonPropertyValue.trim() === ''
               ? 'animate-pulse'
               : ''
           )}
@@ -96,8 +117,8 @@ export const BuildJsonObject = ({ mockJsonData, setMockJsonData }: Props) => {
             className={clsx(
               'focus-visible:ring focus-visible:ring-blue-400 focus-visible:ring-opacity-50 focus-visible:backdrop-blur-md focus-visible:backdrop-saturate-150',
               'w-full text-center px-4 py-2 rounded-md  transition-all duration-600 shadow-md',
-              inputJsonKey.trim() === '' ||
-                inputJsonValue.trim() === '' ||
+              inputJsonPropertyKey.trim() === '' ||
+                inputJsonPropertyValue.trim() === '' ||
                 isDuplicate
                 ? 'text-pink-300 font-normal line-through bg-purple-950 cursor-not-allowed'
                 : 'bg-white text-indigo-800 hover:bg-pink-300 font-semibold cursor-pointer '

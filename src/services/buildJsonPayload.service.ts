@@ -1,3 +1,10 @@
+import {
+  JsonObject,
+  JsonObjectProperty,
+  JsonPayload,
+  JsonValue,
+} from '../types/jsonTypes'
+
 // single primitive type inference
 const inferPrimitiveType = (value: string): string | number | boolean => {
   const lower = value.toLowerCase().trim()
@@ -7,10 +14,7 @@ const inferPrimitiveType = (value: string): string | number | boolean => {
   return value
 }
 
-//infer method
-export const inferType = (
-  value: string
-): string | number | boolean | (string | number | boolean)[] => {
+const inferType = (value: string): JsonValue => {
   const valueTrimmed = value.trim()
 
   // determine if array by presense of comma
@@ -48,36 +52,29 @@ export const inferType = (
   return inferPrimitiveType(valueTrimmed)
 }
 
-export const transformWithInferredTypes = (
-  data: { key: string; value: string }[]
-): Record<
-  string,
-  string | number | boolean | (string | number | boolean)[]
-> => {
-  return data.reduce(
-    (acc, entry) => {
-      acc[entry.key] = inferType(entry.value)
-      return acc
-    },
-    {} as Record<
-      string,
-      string | number | boolean | (string | number | boolean)[]
-    >
-  )
+const transformJsonObjectPropertiesValueByInferringTypes = (
+  jsonObjectProperties: JsonObjectProperty[]
+): JsonObjectProperty[] => {
+  return jsonObjectProperties.map((jsonObjectProperty) => ({
+    key: jsonObjectProperty.key,
+    value: inferType(jsonObjectProperty.value as string),
+  }))
 }
 
-export const buildExportObject = (
-  data: { key: string; value: string }[]
-): {
-  totalItemCount: number
-  items: Record<
-    string,
-    string | number | boolean | (string | number | boolean)[]
-  >[]
-} => {
-  const typed = transformWithInferredTypes(data)
+export const buildJsonPayload = (jsonObjects: JsonObject[]): JsonPayload => {
+  const transformedItems = jsonObjects.map((jsonObject) => {
+    const flatObject: Record<string, JsonValue> = {}
+
+    transformJsonObjectPropertiesValueByInferringTypes(
+      jsonObject.jsonObjectProperties
+    ).forEach((entry) => {
+      flatObject[entry.key] = entry.value
+    })
+    return flatObject
+  })
+
   return {
-    totalItemCount: 1,
-    items: [typed],
+    totalItemCount: transformedItems.length,
+    items: transformedItems,
   }
 }

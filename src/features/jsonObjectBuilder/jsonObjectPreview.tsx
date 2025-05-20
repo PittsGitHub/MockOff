@@ -1,22 +1,30 @@
 import clsx from 'clsx'
 import { useState } from 'react'
-import { buildExportObject } from '../../services/inferTypeAndFormat.service'
-
-type MockJsonDataVerbose = {
-  key: string
-  value: string
-}
+import {
+  JsonObject,
+  JsonObjectProperty,
+  JsonPayload,
+} from '../../types/jsonTypes'
+import { buildJsonPayload as buildJsonPayload } from '../../services/buildJsonPayload.service'
 
 interface Props {
-  mockJsonData: MockJsonDataVerbose[]
-  setMockJsonData: (data: MockJsonDataVerbose[]) => void
+  jsonObject: JsonObject
+  setJsonObject: (jsonObject: JsonObject) => void
 }
 
-export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
+export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
   const [copied, setCopied] = useState(false)
   const [exported, setExported] = useState(false)
 
-  const exportData = buildExportObject(mockJsonData)
+  // testing with 5 duplicate objects
+  const jsonObjects: JsonObject[] = [
+    jsonObject,
+    jsonObject,
+    jsonObject,
+    jsonObject,
+    jsonObject,
+  ]
+  const exportData: JsonPayload = buildJsonPayload(jsonObjects)
 
   const [editingIdx, setEditingIdx] = useState<number | null>(null)
   const [editingField, setEditingField] = useState<'key' | 'value' | null>(null)
@@ -52,7 +60,7 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
   return (
     <div className="flex flex-col space-y-0 w-full max-w-sm">
       <ul className="space-y-0.75">
-        {mockJsonData.map((entry, idx) => (
+        {jsonObject.jsonObjectProperties.map((entry, idx) => (
           <li
             key={entry.key}
             onMouseEnter={() => setHoveredIdx(idx)}
@@ -85,17 +93,20 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                     value={tempEdit}
                     onChange={(e) => setTempEdit(e.target.value)}
                     onBlur={() => {
-                      const updated = [...mockJsonData]
-                      const oldEntry = updated[idx]
-                      updated[idx] = {
+                      const updatedProperties = [
+                        ...jsonObject.jsonObjectProperties,
+                      ]
+                      const oldEntry = updatedProperties[idx]
+
+                      updatedProperties[idx] = {
                         ...oldEntry,
                         key:
                           tempEdit.trim() === ''
                             ? oldEntry.key
                             : tempEdit.trim(),
                       }
-                      setMockJsonData(updated)
 
+                      setJsonObject({ jsonObjectProperties: updatedProperties })
                       setEditingIdx(null)
                       setEditingField(null)
                     }}
@@ -128,7 +139,7 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                 onClick={() => {
                   setEditingIdx(idx)
                   setEditingField('value')
-                  setTempEdit(entry.value)
+                  setTempEdit(entry.value as string)
                 }}
               >
                 {editingIdx === idx && editingField === 'value' ? (
@@ -137,16 +148,20 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                     value={tempEdit}
                     onChange={(e) => setTempEdit(e.target.value)}
                     onBlur={() => {
-                      const updated = [...mockJsonData]
-                      const oldEntry = updated[idx]
-                      updated[idx] = {
+                      const updatedProperties = [
+                        ...jsonObject.jsonObjectProperties,
+                      ]
+                      const oldEntry = updatedProperties[idx]
+
+                      updatedProperties[idx] = {
                         ...oldEntry,
                         value:
                           tempEdit.trim() === ''
                             ? oldEntry.value
                             : tempEdit.trim(),
                       }
-                      setMockJsonData(updated)
+
+                      setJsonObject({ jsonObjectProperties: updatedProperties })
                       setEditingIdx(null)
                       setEditingField(null)
                     }}
@@ -161,8 +176,11 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                     )}
                     autoFocus
                   />
-                ) : (
+                ) : typeof entry.value === 'string' ||
+                  typeof entry.value === 'number' ? (
                   entry.value
+                ) : (
+                  JSON.stringify(entry.value)
                 )}
               </div>
               {/* DELETE PANEL — 1/9 conditionally rendered on hover*/}
@@ -170,8 +188,14 @@ export const JsonObjectPreview = ({ mockJsonData, setMockJsonData }: Props) => {
                 <div
                   className="w-1/9 m-1 px-2 py-1 rounded bg-purple-950 text-center content-center text-pink-200 font-bold cursor-pointer transition-opacity duration-300"
                   onClick={() => {
-                    const updated = mockJsonData.filter((_, i) => i !== idx)
-                    setMockJsonData(updated)
+                    const updatedJsonProperties: JsonObjectProperty[] =
+                      jsonObject.jsonObjectProperties.filter(
+                        (_, i) => i !== idx
+                      )
+                    const updatedJsonObject: JsonObject = {
+                      jsonObjectProperties: updatedJsonProperties,
+                    }
+                    setJsonObject(updatedJsonObject)
                   }}
                   title="Delete property"
                 >

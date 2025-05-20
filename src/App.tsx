@@ -1,9 +1,11 @@
 import clsx from 'clsx'
+import { JsonObject } from './types/jsonTypes'
 import { useState } from 'react'
 import {
   BuildJsonObject,
   JsonObjectPreview,
 } from './features/jsonObjectBuilder'
+import { GenerateJsonObjects } from './features/jsonMockGenerator'
 import { GlobalNav } from './components/globalNavBar'
 
 function App() {
@@ -11,14 +13,9 @@ function App() {
     'builder'
   )
 
-  type MockJsonDataVerbose = {
-    key: string
-    value: string
-  }
-
-  const [mockJsonData, setMockJsonData] = useState<MockJsonDataVerbose[]>([
-    { key: 'id', value: '1' },
-  ])
+  const [jsonObject, setJsonObject] = useState<JsonObject>({
+    jsonObjectProperties: [{ key: 'id', value: '1' }],
+  })
 
   return (
     <div
@@ -45,22 +42,22 @@ function App() {
         {activeView === 'builder' && (
           <>
             <BuildJsonObject
-              mockJsonData={mockJsonData}
-              setMockJsonData={setMockJsonData}
+              jsonObject={jsonObject}
+              setJsonObject={setJsonObject}
             />
             <div className="mt-4">
               <JsonObjectPreview
-                mockJsonData={mockJsonData}
-                setMockJsonData={setMockJsonData}
+                jsonObject={jsonObject}
+                setJsonObject={setJsonObject}
               />
             </div>
           </>
         )}
 
         {activeView === 'generator' && (
-          <div className="text-center">
-            <p className="text-lg">✨ Generate Mock Data Coming Soon ✨</p>
-          </div>
+          <>
+            <GenerateJsonObjects jsonObject={jsonObject} />
+          </>
         )}
       </div>
     </div>
