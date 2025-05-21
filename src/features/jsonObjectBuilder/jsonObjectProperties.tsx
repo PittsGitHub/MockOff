@@ -74,8 +74,8 @@ export const JsonObjectProperties = ({ jsonObject, setJsonObject }: Props) => {
               {/* KEY - shrink to 4/9 if hovering */}
               <div
                 className={clsx(
-                  'px-2 py-1 rounded font-mono cursor-pointer m-1',
-                  'overflow-hidden whitespace-nowrap text-ellipsis text-center content-center',
+                  'px-1 py-1 rounded font-mono cursor-pointer m-1',
+                  'overflow-hidden whitespace-nowrap text-ellipsis text-center content-center flex items-center justify-center',
 
                   hoveredIdx === idx
                     ? 'w-4/9 bg-indigo-900 text-pink-100'
@@ -111,11 +111,11 @@ export const JsonObjectProperties = ({ jsonObject, setJsonObject }: Props) => {
                       setEditingField(null)
                     }}
                     className={clsx(
-                      'w-full rounded  font-mono px-2 resize-none',
-                      'text-center content-center',
+                      'w-full  font-mono  resize-none',
+                      'text-center',
                       'placeholder-pink-100 focus:placeholder-transparent',
-                      'focus-visible:ring focus-visible:ring-blue-400 focus:outline-none',
-                      'transition-all duration-300 shadow-md'
+                      'rounded focus-visible:ring-2 focus-visible:ring-blue-400 focus:outline-none',
+                      'transition-all duration-300 shadow-md bg-transparent'
                     )}
                     autoFocus
                   />
@@ -127,8 +127,8 @@ export const JsonObjectProperties = ({ jsonObject, setJsonObject }: Props) => {
               {/* VALUE - shrink to 4/9 if hovering*/}
               <div
                 className={clsx(
-                  'px-2 py-1 rounded font-mono cursor-pointer m-1',
-                  'overflow-hidden whitespace-nowrap text-ellipsis text-center content-center',
+                  'px-1 py-1 rounded font-mono cursor-pointer m-1',
+                  'overflow-hidden whitespace-nowrap text-ellipsis text-center content-center flex items-center justify-center',
                   hoveredIdx === idx
                     ? 'w-4/9 bg-indigo-800 text-indigo-100'
                     : 'w-1/2 bg-indigo-800 text-indigo-100'
@@ -163,11 +163,11 @@ export const JsonObjectProperties = ({ jsonObject, setJsonObject }: Props) => {
                       setEditingField(null)
                     }}
                     className={clsx(
-                      'w-full rounded  font-mono px-2 resize-none',
-                      'text-center content-center',
+                      'w-full  font-mono  resize-none',
+                      'text-center',
                       'placeholder-pink-100 focus:placeholder-transparent',
-                      'focus-visible:ring focus-visible:ring-blue-400 focus:outline-none',
-                      'transition-all duration-300 shadow-md'
+                      'rounded focus-visible:ring-2 focus-visible:ring-blue-400 focus:outline-none',
+                      'transition-all duration-300 shadow-md bg-transparent'
                     )}
                     autoFocus
                   />
@@ -181,7 +181,10 @@ export const JsonObjectProperties = ({ jsonObject, setJsonObject }: Props) => {
               {/* DELETE PANEL — 1/9 conditionally rendered on hover*/}
               {hoveredIdx === idx && (
                 <div
-                  className="w-1/9 m-1 px-2 py-1 rounded bg-purple-950 text-center content-center text-pink-200 font-bold cursor-pointer transition-opacity duration-300"
+                  className={clsx(
+                    'w-1/9 m-1 px-2 py-1 rounded bg-purple-950 text-center content-center transition-all duration-600',
+                    ' hover:bg-white text-pink-700 shadow cursor-pointer font-bold'
+                  )}
                   onClick={() => {
                     const updatedJsonProperties: JsonObjectProperty[] =
                       jsonObject.jsonObjectProperties.filter(
@@ -194,7 +197,7 @@ export const JsonObjectProperties = ({ jsonObject, setJsonObject }: Props) => {
                   }}
                   title="Delete property"
                 >
-                  X
+                  x
                 </div>
               )}
             </div>
