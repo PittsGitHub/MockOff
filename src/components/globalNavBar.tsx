@@ -8,7 +8,6 @@ interface Props {
 export const GlobalNav = ({ activeView, setActiveView }: Props) => {
   return (
     <div className="flex flex-col space-y-0 w-full max-w-sm">
-      <div className="mt-4 flex flex-row justify-center space-x-2 w-full max-w-sm"></div>
       <div className="mt-4 flex flex-row space-x-2 w-full max-w-sm">
         <button
           type="button"

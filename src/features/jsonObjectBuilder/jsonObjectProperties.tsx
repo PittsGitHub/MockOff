@@ -12,7 +12,7 @@ interface Props {
   setJsonObject: (jsonObject: JsonObject) => void
 }
 
-export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
+export const JsonObjectProperties = ({ jsonObject, setJsonObject }: Props) => {
   const [copied, setCopied] = useState(false)
   const [exported, setExported] = useState(false)
 

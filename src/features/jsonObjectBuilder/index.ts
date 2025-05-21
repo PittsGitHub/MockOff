@@ -1,2 +1,2 @@
 export * from './buildJsonObject'
-export * from './jsonObjectPreview'
+export * from './jsonObjectProperties'

@@ -3,7 +3,7 @@ import { JsonObject } from './types/jsonTypes'
 import { useState } from 'react'
 import {
   BuildJsonObject,
-  JsonObjectPreview,
+  JsonObjectProperties,
 } from './features/jsonObjectBuilder'
 import { GenerateJsonObjects } from './features/jsonMockGenerator'
 import { GlobalNav } from './components/globalNavBar'
@@ -30,15 +30,16 @@ function App() {
         'p-4'
       )}
     >
-      <h1 className="text-5xl font-bold tracking-tight ">Mock Off</h1>
+      <div className=" mt-8 text-center">
+        <h1 className="text-5xl font-bold tracking-tight ">Mock Off</h1>
 
-      <p className="text-sm text-pink-200 italic tracking-wide font-light">
-        JSON object building & generation
-      </p>
-
+        <p className="text-sm text-pink-200 italic tracking-wide ">
+          Build & Mock JSON payloads
+        </p>
+      </div>
       <GlobalNav activeView={activeView} setActiveView={setActiveView} />
 
-      <div className="mt-8 w-full max-w-sm">
+      <div className="mt-4 w-full max-w-sm">
         {activeView === 'builder' && (
           <>
             <BuildJsonObject
@@ -46,7 +47,7 @@ function App() {
               setJsonObject={setJsonObject}
             />
             <div className="mt-4">
-              <JsonObjectPreview
+              <JsonObjectProperties
                 jsonObject={jsonObject}
                 setJsonObject={setJsonObject}
               />
