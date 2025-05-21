@@ -67,7 +67,7 @@ export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
             onMouseLeave={() => setHoveredIdx(null)}
             className={clsx(
               'w-full px-2 py-2 rounded-md',
-              'backdrop-blur-md backdrop-saturate-150 transition-all delay-100 duration-300 shadow-md hover:shadow-xl hover:scale-105'
+              'backdrop-blur-md backdrop-saturate-150 transition-all delay-100 duration-300 shadow-xl hover:shadow-xl hover:scale-105'
             )}
           >
             <div className="flex ">
@@ -75,8 +75,8 @@ export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
               <div
                 className={clsx(
                   'px-2 py-1 rounded font-mono cursor-pointer m-1',
-                  'min-h-[3.5rem] max-h-[3.5rem] overflow-hidden',
-                  'whitespace-pre-wrap break-words text-center content-center',
+                  'overflow-hidden whitespace-nowrap text-ellipsis text-center content-center',
+
                   hoveredIdx === idx
                     ? 'w-4/9 bg-indigo-900 text-pink-100'
                     : 'w-1/2 bg-indigo-900 text-pink-100'
@@ -89,7 +89,7 @@ export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
               >
                 {editingIdx === idx && editingField === 'key' ? (
                   <textarea
-                    rows={2}
+                    rows={1}
                     value={tempEdit}
                     onChange={(e) => setTempEdit(e.target.value)}
                     onBlur={() => {
@@ -111,10 +111,8 @@ export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
                       setEditingField(null)
                     }}
                     className={clsx(
-                      'text-center pt-[0.75rem]',
                       'w-full rounded  font-mono px-2 resize-none',
                       'text-center content-center',
-                      'z-10 relative',
                       'placeholder-pink-100 focus:placeholder-transparent',
                       'focus-visible:ring focus-visible:ring-blue-400 focus:outline-none',
                       'transition-all duration-300 shadow-md'
@@ -130,8 +128,7 @@ export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
               <div
                 className={clsx(
                   'px-2 py-1 rounded font-mono cursor-pointer m-1',
-                  'min-h-[3.5rem] max-h-[3.5rem] overflow-hidden',
-                  'whitespace-pre-wrap break-words text-center content-center',
+                  'overflow-hidden whitespace-nowrap text-ellipsis text-center content-center',
                   hoveredIdx === idx
                     ? 'w-4/9 bg-indigo-800 text-indigo-100'
                     : 'w-1/2 bg-indigo-800 text-indigo-100'
@@ -144,7 +141,7 @@ export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
               >
                 {editingIdx === idx && editingField === 'value' ? (
                   <textarea
-                    rows={2}
+                    rows={1}
                     value={tempEdit}
                     onChange={(e) => setTempEdit(e.target.value)}
                     onBlur={() => {
@@ -166,10 +163,8 @@ export const JsonObjectPreview = ({ jsonObject, setJsonObject }: Props) => {
                       setEditingField(null)
                     }}
                     className={clsx(
-                      'text-center pt-[0.75rem]',
                       'w-full rounded  font-mono px-2 resize-none',
                       'text-center content-center',
-                      'z-10 relative',
                       'placeholder-pink-100 focus:placeholder-transparent',
                       'focus-visible:ring focus-visible:ring-blue-400 focus:outline-none',
                       'transition-all duration-300 shadow-md'

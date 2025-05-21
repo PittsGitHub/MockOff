@@ -22,7 +22,7 @@ export const GenerateJsonObjects = ({ jsonObject }: Props) => {
         min={1}
         value={entryCount}
         onChange={(e) => setEntryCount(Number(e.target.value))}
-        className="px-2 py-1 rounded bg-indigo-900 text-pink-100 border border-blue-400 focus:outline-none focus:ring focus:ring-blue-400"
+        className="px-2 py-1 rounded bg-indigo-900 text-pink-100  focus:outline-none focus:ring focus:ring-blue-400"
       />
 
       {/* Placeholder for generate button and logic */}
