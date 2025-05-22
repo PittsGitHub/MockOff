@@ -4,18 +4,17 @@ import { useState } from 'react'
 import {
   BuildJsonObject,
   JsonObjectProperties,
-} from './features/jsonObjectBuilder'
+} from './features/jsonPayloadBuilder'
 import { GenerateJsonObjects } from './features/jsonMockGenerator'
 import { GlobalNav } from './components/globalNavBar'
+import { JsonPayloadExport } from './components/globalJsonPayloadExport'
 
 function App() {
   const [activeView, setActiveView] = useState<'builder' | 'generator'>(
     'builder'
   )
 
-  const [jsonObject, setJsonObject] = useState<JsonObject>({
-    jsonObjectProperties: [{ key: 'id', value: '1' }],
-  })
+  const [jsonObject, setJsonObject] = useState<JsonObject>({ id: 1 })
 
   return (
     <div
@@ -51,6 +50,9 @@ function App() {
                 jsonObject={jsonObject}
                 setJsonObject={setJsonObject}
               />
+            </div>
+            <div>
+              <JsonPayloadExport jsonObject={jsonObject} />
             </div>
           </>
         )}

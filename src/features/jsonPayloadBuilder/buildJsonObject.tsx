@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react'
-import { JsonObject, JsonObjectProperty } from '../../types/jsonTypes'
+import { JsonObject } from '../../types/jsonTypes'
 import clsx from 'clsx'
 
 interface Props {
@@ -13,9 +13,7 @@ export const BuildJsonObject = ({ jsonObject, setJsonObject }: Props) => {
   const trimmedKey = inputJsonPropertyKey.trim()
   const trimmedValue = inputJsonPropertyValue.trim()
 
-  const isDuplicate = jsonObject.jsonObjectProperties.some(
-    (entry) => entry.key === trimmedKey
-  )
+  const isDuplicate = trimmedKey in jsonObject
 
   const addButtonEnabled =
     inputJsonPropertyKey.trim() !== '' &&
@@ -28,22 +26,9 @@ export const BuildJsonObject = ({ jsonObject, setJsonObject }: Props) => {
       inputJsonPropertyKey.trim() !== '' &&
       inputJsonPropertyValue.trim() !== ''
     ) {
-      // then we create a new property for our object
-      const newJsonObjectProperty: JsonObjectProperty = {
-        key: inputJsonPropertyKey,
-        value: inputJsonPropertyValue,
-      }
-      // we create a new array of json properties
-      // it includes the existing properties plus our new property
-      const newJsonProperties: JsonObjectProperty[] = [
-        ...jsonObject.jsonObjectProperties,
-        newJsonObjectProperty,
-      ]
-
-      // finally we create a new json object with our
-      // new property appended to our existing properties
       const newJsonObject: JsonObject = {
-        jsonObjectProperties: newJsonProperties,
+        ...jsonObject,
+        [trimmedKey]: trimmedValue,
       }
 
       // we then call back and set the new Json object

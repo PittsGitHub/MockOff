@@ -1,15 +1,9 @@
 export type JsonPayload = {
   totalItemCount: number
-  items: Record<string, JsonValue>[]
+  items: JsonObject[]
 }
 
-export type JsonObject = {
-  jsonObjectProperties: JsonObjectProperty[]
-}
-export type JsonObjectProperty = {
-  key: string
-  value: JsonValue
-}
+export type JsonObject = Record<string, JsonValue>
 
 export type JsonValue =
   | string

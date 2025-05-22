@@ -1,9 +1,4 @@
-import {
-  JsonObject,
-  JsonObjectProperty,
-  JsonPayload,
-  JsonValue,
-} from '../types/jsonTypes'
+import { JsonObject, JsonPayload, JsonValue } from '../types/jsonTypes'
 
 // single primitive type inference
 const inferPrimitiveType = (value: string): string | number | boolean => {
@@ -52,29 +47,35 @@ const inferType = (value: string): JsonValue => {
   return inferPrimitiveType(valueTrimmed)
 }
 
-const transformJsonObjectPropertiesValueByInferringTypes = (
-  jsonObjectProperties: JsonObjectProperty[]
-): JsonObjectProperty[] => {
-  return jsonObjectProperties.map((jsonObjectProperty) => ({
-    key: jsonObjectProperty.key,
-    value: inferType(jsonObjectProperty.value as string),
-  }))
+const makeNewJsonObjectWithValueTypesInfered = (
+  jsonObject: JsonObject
+): JsonObject => {
+  let newJsonObject: JsonObject = {}
+
+  Object.entries(jsonObject).forEach((kvp) => {
+    if (kvp[1]) {
+      const valueToString = kvp[1].toString()
+      const newValue = inferType(valueToString)
+      newJsonObject[kvp[0]] = newValue
+    }
+  })
+  return newJsonObject
 }
 
 export const buildJsonPayload = (jsonObjects: JsonObject[]): JsonPayload => {
-  const transformedItems = jsonObjects.map((jsonObject) => {
-    const flatObject: Record<string, JsonValue> = {}
+  let jsonPayload: JsonPayload = {
+    totalItemCount: jsonObjects.length,
+    items: [],
+  }
+  let transformedItems: JsonObject[] = []
 
-    transformJsonObjectPropertiesValueByInferringTypes(
-      jsonObject.jsonObjectProperties
-    ).forEach((entry) => {
-      flatObject[entry.key] = entry.value
-    })
-    return flatObject
+  //loop through all json objects passed formatting their values
+  jsonObjects.map((jsonObject) => {
+    const valueTypesInferedJsonObject =
+      makeNewJsonObjectWithValueTypesInfered(jsonObject)
+    transformedItems.push(valueTypesInferedJsonObject)
   })
 
-  return {
-    totalItemCount: transformedItems.length,
-    items: transformedItems,
-  }
+  jsonPayload.items = [...transformedItems]
+  return jsonPayload
 }
