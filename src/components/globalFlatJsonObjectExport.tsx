@@ -1,18 +1,16 @@
 import clsx from 'clsx'
 import { useState } from 'react'
-import { JsonObject, JsonPayload } from '../types/jsonTypes'
-import { buildJsonPayload as buildJsonPayload } from '../services/buildJsonPayload.service'
+import { JsonObject } from '../types/jsonTypes'
+import { buildFlatJsonRequestObject } from '../services/buildJsonPayload.service'
 
 interface Props {
   jsonObject: JsonObject
 }
-export const JsonPayloadExport = ({ jsonObject }: Props) => {
+export const JsonObjectExport = ({ jsonObject }: Props) => {
   const [copied, setCopied] = useState(false)
   const [exported, setExported] = useState(false)
 
-  // testing with 2 duplicate objects
-  const jsonObjects: JsonObject[] = [jsonObject, jsonObject]
-  const exportData: JsonPayload = buildJsonPayload(jsonObjects)
+  const exportData: JsonObject = buildFlatJsonRequestObject(jsonObject)
 
   const handleExport = () => {
     const blob = new Blob([JSON.stringify(exportData, null, 2)], {
@@ -52,7 +50,7 @@ export const JsonPayloadExport = ({ jsonObject }: Props) => {
             : 'bg-white hover:bg-pink-300 text-indigo-800 shadow cursor-pointer'
         )}
       >
-        {exported ? 'Exported!' : 'Export to .json file'}
+        {exported ? 'Exported!' : 'Export object'}
       </button>
 
       <button
@@ -65,7 +63,7 @@ export const JsonPayloadExport = ({ jsonObject }: Props) => {
             : 'bg-white hover:bg-pink-300 text-indigo-800 shadow cursor-pointer'
         )}
       >
-        {copied ? 'Copied!' : 'Copy .json'}
+        {copied ? 'Copied!' : 'Copy object'}
       </button>
     </div>
   )

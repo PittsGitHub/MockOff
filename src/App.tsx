@@ -4,17 +4,20 @@ import { useState } from 'react'
 import {
   BuildJsonObject,
   JsonObjectProperties,
-} from './features/jsonPayloadBuilder'
-import { GenerateJsonObjects } from './features/jsonMockGenerator'
+} from './features/jsonObjectBuilder'
+import { GenerateJsonObjects } from './features/jsonPayloadGenerator'
 import { GlobalNav } from './components/globalNavBar'
-import { JsonPayloadExport } from './components/globalJsonPayloadExport'
+import { JsonObjectExport } from './components/globalFlatJsonObjectExport'
+import { JsonPayloadExport } from './components/globalEnvelopFlatJsonObjectPayloadExport'
 
 function App() {
   const [activeView, setActiveView] = useState<'builder' | 'generator'>(
     'builder'
   )
-
   const [jsonObject, setJsonObject] = useState<JsonObject>({ id: 1 })
+  const [numberOfPayloads, setNumberOfPayloads] = useState<number>(1)
+  const [numberOfObjects, setNumberOfObjects] = useState<number>(1)
+  const [exportPayloadReady, setExportPayloadReady] = useState<boolean>(false)
 
   return (
     <div
@@ -29,18 +32,21 @@ function App() {
         'p-4'
       )}
     >
-      <div className=" mt-8 text-center">
+      <div className=" mt-8 text-center content-center">
         <h1 className="text-5xl font-bold tracking-tight ">Mock Off</h1>
 
         <p className="text-sm text-pink-200 italic tracking-wide ">
-          Build & Mock JSON payloads
+          Build & Mock Flat Normalised JSON objects and payloads
         </p>
       </div>
       <GlobalNav activeView={activeView} setActiveView={setActiveView} />
 
-      <div className="mt-4 w-full max-w-sm">
+      <div className="mt-2 w-full max-w-sm">
         {activeView === 'builder' && (
           <>
+            {/* <p className="text-sm text-center text-pink-200 italic tracking-wide mb-4">
+              Build or Edit a flat JSON object
+            </p> */}
             <BuildJsonObject
               jsonObject={jsonObject}
               setJsonObject={setJsonObject}
@@ -52,14 +58,32 @@ function App() {
               />
             </div>
             <div>
-              <JsonPayloadExport jsonObject={jsonObject} />
+              <JsonObjectExport jsonObject={jsonObject} />
             </div>
           </>
         )}
 
         {activeView === 'generator' && (
           <>
-            <GenerateJsonObjects jsonObject={jsonObject} />
+            {/* <p className="text-sm text-center text-pink-200 italic tracking-wide mb-4">
+              Generate a enveloped payloads <br />
+              Containing flat json objects <br />
+              With object properties generated
+            </p> */}
+            <GenerateJsonObjects
+              jsonObject={jsonObject}
+              numberOfObjects={numberOfObjects}
+              setNumberOfObjects={setNumberOfObjects}
+              numberOfPayloads={numberOfPayloads}
+              setNumberOfPayloads={setNumberOfPayloads}
+              setExportPayloadReady={setExportPayloadReady}
+            />
+            <JsonPayloadExport
+              jsonObject={jsonObject}
+              numberOfObjects={numberOfObjects}
+              numberOfPayloads={numberOfPayloads}
+              exportPayloadReady={exportPayloadReady}
+            />
           </>
         )}
       </div>

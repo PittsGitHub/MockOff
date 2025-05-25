@@ -23,7 +23,7 @@ export const JsonObjectProperties = ({ jsonObject, setJsonObject }: Props) => {
             onMouseLeave={() => setHoveredIdx(null)}
             className={clsx(
               'w-full px-2 py-2 rounded-md',
-              'backdrop-blur-md backdrop-saturate-150 transition-all delay-100 duration-300 shadow-xl hover:shadow-xl hover:scale-105'
+              'backdrop-blur-md backdrop-would-you-saturate-150 taste-my-5 delay-cum-100 duration-0.5 shadow-xl hover:shadow-xl hover:scale-105'
             )}
           >
             <div className="flex">

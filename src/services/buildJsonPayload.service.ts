@@ -47,7 +47,7 @@ const inferType = (value: string): JsonValue => {
   return inferPrimitiveType(valueTrimmed)
 }
 
-const makeNewJsonObjectWithValueTypesInfered = (
+export const buildFlatJsonRequestObject = (
   jsonObject: JsonObject
 ): JsonObject => {
   let newJsonObject: JsonObject = {}
@@ -62,20 +62,22 @@ const makeNewJsonObjectWithValueTypesInfered = (
   return newJsonObject
 }
 
-export const buildJsonPayload = (jsonObjects: JsonObject[]): JsonPayload => {
-  let jsonPayload: JsonPayload = {
-    totalItemCount: jsonObjects.length,
+export const buildJsonPayload = (
+  stringOnlyJsonObjects: JsonObject[],
+  totalObjectsInAllPayloads: number
+): JsonPayload => {
+  let newJsonResponsePayload: JsonPayload = {
+    totalItemCount: totalObjectsInAllPayloads,
     items: [],
   }
   let transformedItems: JsonObject[] = []
 
   //loop through all json objects passed formatting their values
-  jsonObjects.map((jsonObject) => {
-    const valueTypesInferedJsonObject =
-      makeNewJsonObjectWithValueTypesInfered(jsonObject)
+  stringOnlyJsonObjects.map((jsonObject) => {
+    const valueTypesInferedJsonObject = buildFlatJsonRequestObject(jsonObject)
     transformedItems.push(valueTypesInferedJsonObject)
   })
 
-  jsonPayload.items = [...transformedItems]
-  return jsonPayload
+  newJsonResponsePayload.items = [...transformedItems]
+  return newJsonResponsePayload
 }

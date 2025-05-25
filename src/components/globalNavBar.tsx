@@ -19,7 +19,7 @@ export const GlobalNav = ({ activeView, setActiveView }: Props) => {
               : 'bg-white text-indigo-800 hover:bg-pink-300 cursor-pointer'
           )}
         >
-          Define object
+          Mock object
         </button>
         <button
           type="button"
@@ -31,7 +31,7 @@ export const GlobalNav = ({ activeView, setActiveView }: Props) => {
               : 'bg-white text-indigo-800 hover:bg-pink-300 cursor-pointer'
           )}
         >
-          Mock generation
+          Mock payload
         </button>
       </div>
     </div>
