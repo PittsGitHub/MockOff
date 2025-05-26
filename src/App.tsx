@@ -8,15 +8,17 @@ import {
 import { GenerateJsonObjects } from './features/jsonPayloadGenerator'
 import { GlobalNav } from './components/globalNavBar'
 import { JsonObjectExport } from './components/globalFlatJsonObjectExport'
-import { JsonPayloadExport } from './components/globalEnvelopFlatJsonObjectPayloadExport'
+import { JsonPayloadExport } from './components/globalFlatJsonObjectPayloadExport'
 
 function App() {
   const [activeView, setActiveView] = useState<'builder' | 'generator'>(
     'builder'
   )
   const [jsonObject, setJsonObject] = useState<JsonObject>({ id: 1 })
+  const [mockedJsonObjects, setMockedJsonObjects] = useState<JsonObject[]>([])
   const [numberOfPayloads, setNumberOfPayloads] = useState<number>(1)
-  const [numberOfObjects, setNumberOfObjects] = useState<number>(1)
+  const [numberOfObjectsPerPayload, setNumberOfObjectsPerPayload] =
+    useState<number>(1)
   const [exportPayloadReady, setExportPayloadReady] = useState<boolean>(false)
 
   return (
@@ -72,15 +74,16 @@ function App() {
             </p> */}
             <GenerateJsonObjects
               jsonObject={jsonObject}
-              numberOfObjects={numberOfObjects}
-              setNumberOfObjects={setNumberOfObjects}
               numberOfPayloads={numberOfPayloads}
               setNumberOfPayloads={setNumberOfPayloads}
+              numberOfObjectsPerPayload={numberOfObjectsPerPayload}
+              setNumberOfObjectsPerPayload={setNumberOfObjectsPerPayload}
               setExportPayloadReady={setExportPayloadReady}
+              setMockedJsonObjects={setMockedJsonObjects}
             />
             <JsonPayloadExport
-              jsonObject={jsonObject}
-              numberOfObjects={numberOfObjects}
+              mockedJsonObjects={mockedJsonObjects}
+              numberOfObjectsPerPayload={numberOfObjectsPerPayload}
               numberOfPayloads={numberOfPayloads}
               exportPayloadReady={exportPayloadReady}
             />

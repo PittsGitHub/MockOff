@@ -11,6 +11,7 @@
     "prepare": "husky"
   },
   "dependencies": {
+    "@faker-js/faker": "^9.8.0",
     "@heroicons/react": "^2.2.0",
     "clsx": "^2.1.1",
     "file-saver": "^2.0.5",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@eslint/js": "^9.22.0",
     "@tailwindcss/vite": "^4.1.5",
+    "@types/faker": "^6.6.11",
     "@types/file-saver": "^2.0.7",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19.0.4",

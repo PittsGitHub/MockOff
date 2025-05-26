@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import { useState } from 'react'
 import { JsonObject, JsonPayload } from '../types/jsonTypes'
-import { buildJsonPayload } from '../services/buildJsonPayload.service'
+import { chunkArray } from '../services/buildJsonPayload.service'
 import JSZip from 'jszip'
 import { saveAs } from 'file-saver'
 import {
@@ -12,33 +12,28 @@ import {
 } from '../styles/button.style'
 
 interface Props {
-  jsonObject: JsonObject
   numberOfPayloads: number
-  numberOfObjects: number
+  numberOfObjectsPerPayload: number
   exportPayloadReady: boolean
+  mockedJsonObjects: JsonObject[]
 }
 export const JsonPayloadExport = ({
-  jsonObject,
-  numberOfPayloads,
-  numberOfObjects,
+  numberOfObjectsPerPayload,
   exportPayloadReady,
+  mockedJsonObjects,
 }: Props) => {
   const [copiedFirst, setCopiedFirst] = useState(false)
   const [exportedFirst, setExportedFirst] = useState(false)
   const [exported, setExported] = useState(false)
 
-  const jsonObjects: JsonObject[] = Array.from(
-    { length: numberOfObjects },
-    () => ({ ...jsonObject })
-  )
+  const payloadChunks = chunkArray(mockedJsonObjects, numberOfObjectsPerPayload)
 
-  const totalObjects = numberOfObjects * numberOfPayloads
-  const exportData: JsonPayload = buildJsonPayload(jsonObjects, totalObjects)
+  const totalObjects = mockedJsonObjects.length
 
-  const exportDataLots: JsonPayload[] = Array.from(
-    { length: numberOfPayloads },
-    () => ({ ...exportData })
-  )
+  const exportDataLots: JsonPayload[] = payloadChunks.map((chunk) => ({
+    totalItemCount: totalObjects,
+    items: chunk,
+  }))
 
   const handleExport = async () => {
     const zip = new JSZip()

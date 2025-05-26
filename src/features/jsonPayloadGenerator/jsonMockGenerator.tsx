@@ -10,14 +10,18 @@ import {
   buttonVariantDefault,
 } from '../../styles/button.style'
 
+import { generateMockObjects } from '../../services/mockData.service'
+import { buildFlatJsonRequestObject } from '../../services/buildJsonPayload.service'
+
 import clsx from 'clsx'
 interface Props {
   jsonObject: JsonObject
   numberOfPayloads: number
   setNumberOfPayloads: (numberOfPayloads: number) => void
-  numberOfObjects: number
-  setNumberOfObjects: (numberOfPayloads: number) => void
+  numberOfObjectsPerPayload: number
+  setNumberOfObjectsPerPayload: (numberOfPayloads: number) => void
   setExportPayloadReady: (exportPayloadReady: boolean) => void
+  setMockedJsonObjects: (setMockedJsonObjects: JsonObject[]) => void
 }
 
 const numberClamp = (value: number, min: number, max: number) =>
@@ -27,16 +31,20 @@ export const GenerateJsonObjects = ({
   jsonObject,
   numberOfPayloads,
   setNumberOfPayloads,
-  numberOfObjects,
-  setNumberOfObjects,
+  numberOfObjectsPerPayload,
+  setNumberOfObjectsPerPayload,
   setExportPayloadReady,
+  setMockedJsonObjects,
 }: Props) => {
   const [generateMockDataOnClick, setGenerateMockDataOnClick] = useState(false)
 
-  const generateMockData = () => {
-    setGenerateMockDataOnClick(true)
-    setTimeout(() => setGenerateMockDataOnClick(false), 800)
-    console.log('go mock data goooo')
+  const generateMockData = async () => {
+    const typesInferedObject = buildFlatJsonRequestObject(jsonObject)
+    const mockJsonObjects: JsonObject[] = generateMockObjects(
+      typesInferedObject,
+      numberOfObjectsPerPayload * numberOfPayloads
+    )
+    setMockedJsonObjects(mockJsonObjects)
   }
 
   return (
@@ -67,7 +75,7 @@ export const GenerateJsonObjects = ({
           />
           <input
             {...sharedInputProps}
-            value={numberOfObjects}
+            value={numberOfObjectsPerPayload}
             onChange={(e) => {
               const minObjects = 1
               const maxObjects = 250
@@ -77,7 +85,7 @@ export const GenerateJsonObjects = ({
                 minObjects,
                 maxObjects
               )
-              setNumberOfObjects(clampedValue)
+              setNumberOfObjectsPerPayload(clampedValue)
               setExportPayloadReady(false)
             }}
           />
@@ -86,9 +94,14 @@ export const GenerateJsonObjects = ({
 
       <button
         type="button"
-        onClick={() => {
-          generateMockData()
-          setExportPayloadReady(true)
+        onClick={async () => {
+          setGenerateMockDataOnClick(true) // show "generating..."
+          setExportPayloadReady(false) // disable export buttons
+
+          await generateMockData() // this may take 1-2s with large payloads
+
+          setExportPayloadReady(true) // enable export buttons
+          setGenerateMockDataOnClick(false) // reset button text
         }}
         className={clsx(
           sharedButtonBaseClass,
