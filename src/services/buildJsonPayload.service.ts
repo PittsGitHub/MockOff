@@ -23,22 +23,3 @@ export const buildFlatJsonRequestObject = (
   })
   return newJsonObject
 }
-
-export const buildJsonPayload = (
-  stringOnlyJsonObjects: JsonObject[],
-  totalObjectsInAllPayloads: number
-): JsonPayload => {
-  let newJsonResponsePayload: JsonPayload = {
-    totalItemCount: totalObjectsInAllPayloads,
-    items: [],
-  }
-  let transformedItems: JsonObject[] = []
-
-  stringOnlyJsonObjects.map((jsonObject) => {
-    const valueTypesInferedJsonObject = buildFlatJsonRequestObject(jsonObject)
-    transformedItems.push(valueTypesInferedJsonObject)
-  })
-
-  newJsonResponsePayload.items = [...transformedItems]
-  return newJsonResponsePayload
-}

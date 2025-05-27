@@ -26,7 +26,7 @@ const generateMockValue = (key: string, exampleValue: JsonValue): JsonValue => {
       return faker.datatype.boolean()
     case 'string':
       if (lowerKey.includes('email')) return faker.internet.email()
-      if (lowerKey.includes('name')) return faker.person.fullName()
+      if (lowerKey.includes('name')) return faker.person.firstName()
       if (lowerKey.includes('city')) return faker.location.city()
       if (lowerKey.includes('address')) return faker.location.streetAddress()
       return faker.word.words(2)
